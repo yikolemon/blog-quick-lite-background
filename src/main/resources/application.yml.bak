@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      host:  #指定MongoDB服务地址
+      port:  #指定端口，默认就为27017
+      database: #指定使用的数据库(集合)
+      authentication-database:  # 登录认证的逻辑库名
+      username:  #用户名
+      password:  #密码
