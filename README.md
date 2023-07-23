@@ -4,4 +4,4 @@ react博客的后端部分
 目前还在思考如何将数据自动备份到github里，实现更加便捷的迁移
 
 mongo:
-docker run -p 27017:27017 -v /docker/mongo/db:/data/db --name mongo -d mongo
+docker run -p 27017:27017 -v /docker/mongo/db:/data/db --name mongo -d mongo --auth

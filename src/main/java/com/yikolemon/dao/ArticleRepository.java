@@ -1,10 +1,8 @@
-package dao;
+package com.yikolemon.dao;
 
-import entity.Article;
+import com.yikolemon.entity.Article;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * 继承 MongoRepository<实体类，主键类型>,以实现CRUD

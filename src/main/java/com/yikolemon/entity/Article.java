@@ -1,4 +1,4 @@
-package entity;
+package com.yikolemon.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

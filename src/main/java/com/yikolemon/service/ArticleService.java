@@ -1,6 +1,6 @@
-package service;
+package com.yikolemon.service;
 
-import entity.Article;
+import com.yikolemon.entity.Article;
 
 import java.util.List;
 

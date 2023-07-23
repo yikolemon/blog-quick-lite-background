@@ -1,11 +1,11 @@
+package com.yikolemon;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * @author duanfuqiang
+ * @author yikolemon
  * @date 2023/7/19 23:33
  * @description
  */
@@ -13,7 +13,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan
 @EnableAutoConfiguration
 public class SpringBootApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(SpringBootApplication.class,args);
     }
+
 }

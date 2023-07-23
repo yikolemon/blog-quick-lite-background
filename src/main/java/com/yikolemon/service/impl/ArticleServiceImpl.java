@@ -1,16 +1,16 @@
-package service.impl;
+package com.yikolemon.service.impl;
 
-import dao.ArticleRepository;
-import entity.Article;
+import com.yikolemon.dao.ArticleRepository;
+import com.yikolemon.entity.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import service.ArticleService;
+import com.yikolemon.service.ArticleService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author duanfuqiang
+ * @author yikolemon
  * @date 2023/7/22 21:58
  * @description
  */

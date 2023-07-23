@@ -1,11 +1,11 @@
-package controller;
+package com.yikolemon.controller;
 
-import entity.Article;
+import com.yikolemon.entity.Article;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import service.ArticleService;
+import com.yikolemon.service.ArticleService;
 
 import java.util.List;
 
