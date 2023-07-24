@@ -7,3 +7,8 @@ spring:
       authentication-database:  # 登录认证的逻辑库名
       username:  #用户名
       password:  #密码
+
+cnblogs:
+  oauth2:
+    client_id:
+    client_secret:

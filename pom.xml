@@ -51,6 +51,15 @@
             <version>2.9.2</version>
         </dependency>
 
+        <!--oauth2-client -->
+        <dependency>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.client</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+
+
 
     </dependencies>
 
