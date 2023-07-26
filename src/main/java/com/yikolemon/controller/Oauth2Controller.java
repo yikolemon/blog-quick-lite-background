@@ -1,19 +1,30 @@
 package com.yikolemon.controller;
 
-import org.apache.oltu.oauth2.client.OAuthClient;
-import org.apache.oltu.oauth2.client.URLConnectionClient;
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-import org.apache.oltu.oauth2.client.response.OAuthAccessTokenResponse;
-import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import org.apache.oltu.oauth2.common.message.types.GrantType;
+
+import com.google.gson.Gson;
+import com.yikolemon.vo.AuthResponse;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author yikolemon
@@ -21,13 +32,16 @@ import javax.servlet.http.HttpServletResponse;
  * @description
  */
 
-@Component
+@Controller
+@RequestMapping("/auth")
 public class Oauth2Controller {
 
-    @Value("${cnblos}")
-
+    @Value("${cnblogs.oauth2.client_id}")
     private  String clientId = null;
+
+    @Value("${cnblogs.oauth2.client_secret}")
     private String clientSecret = null;
+
     String accessTokenUrl = null;
     String userInfoUrl = null;
 
@@ -37,74 +51,54 @@ public class Oauth2Controller {
     String response_type = null;
     String code= null;
 
-    //跳转oauth2认证服务器认证，获取code
-    @RequestMapping("/requestServerCode")
-    public String requestServerFirst(HttpServletRequest request, HttpServletResponse response, RedirectAttributes attr) throws OAuthProblemException {
-        String requestUrl=null;
-//        OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
-//        String requestUrl = null;
-//        scpoe="openid profile CnBlogsApi offline_access";
-//        try {
-//            //构建oauthd的请求。设置请求服务地址（accessTokenUrl）、clientId、response_type、redirectUrl
-//            OAuthClientRequest accessTokenRequest = OAuthClientRequest
-//                    .authorizationLocation(accessTokenUrl)
-//                    .setClientId(clientId)
-//                    .setScope(scpoe)
-//                    .setResponseType(response_type)
-//                    .setRedirectURI(redirectUrl)
-//                    .buildQueryMessage();
-//            requestUrl = accessTokenRequest.getLocationUri();
-//            System.out.println(requestUrl);
-//        } catch (OAuthSystemException e) {
-//            e.printStackTrace();
-//        }
-        return "redirect:" + requestUrl;
+    //跳转oauth2认证服务器认证，授权码模式，第一步，获取code
+    @GetMapping("/getCode")
+    public String oauth2GetCode(HttpServletRequest request, HttpServletResponse response, RedirectAttributes attr) throws URISyntaxException {
+        //构建URI
+        URIBuilder uriBuilder = new URIBuilder("https://oauth.cnblogs.com/connect/authorize");
+        uriBuilder.addParameter("client_id",clientId);
+        uriBuilder.addParameter("scope","openid profile CnBlogsApi offline_access");
+        uriBuilder.addParameter("response_type","code id_token");
+        uriBuilder.addParameter("redirect_uri","https://oauth.cnblogs.com/auth/callback");
+        uriBuilder.addParameter("nonce",UUID.randomUUID().toString());
+        URI uri = uriBuilder.build();
+        return "redirect:" + uri.toString();
     }
 
     //通过认证得到的code，获取access_token
+    //授权码模式第二步
     //接受客户端返回的code，提交申请access token的请求
-    @RequestMapping("/callbackCode")
-    public Object toLogin(HttpServletRequest request){
-//
-//        System.out.println("-----------客户端/callbackCode--------------------------------------------------------------------------------");
-//        clientId = "clientId";
-//        clientSecret = "clientSecret";
-//        //accessTokenUrl="http://localhost:8082/oauthserver/responseAccessToken";
-//        userInfoUrl = "userInfoUrl";
-//        //redirectUrl = "http://localhost:8081/oauthclient01/server/accessToken";
-//        HttpServletRequest httpRequest = (HttpServletRequest)request;
-//        code = httpRequest.getParameter("code");
-//        System.out.println(code);
-//        OAuthClient oAuthClient =new OAuthClient(new URLConnectionClient());
-//
-//        try {
-//            OAuthClientRequest accessTokenRequest = OAuthClientRequest
-//                    .tokenLocation(accessTokenUrl)
-//                    .setGrantType(GrantType.AUTHORIZATION_CODE)
-//                    .setClientId(clientId)
-//                    .setClientSecret(clientSecret)
-//                    .setCode(code)
-//                    .setRedirectURI(redirectUrl)
-//                    .buildQueryMessage();
-//
-//            //去服务端请求access token，并返回响应
-//            OAuthAccessTokenResponse oAuthResponse =oAuthClient.accessToken(accessTokenRequest, OAuth.HttpMethod.POST);
-//            //获取服务端返回过来的access token
-//            String accessToken = oAuthResponse.getAccessToken();
-//
-//            //查看access token是否过期
-//            Long expiresIn =oAuthResponse.getExpiresIn();
-//
-//            System.out.println("客户端/callbackCode方法的token：：："+accessToken);
-//            System.out.println("-----------客户端/callbackCode--------------------------------------------------------------------------------");
-//
-//            return"redirect:http://localhost:8081/oauthclient01/server/accessToken?accessToken="+accessToken;
-//
-//        } catch (OAuthSystemException e) {
-//            e.printStackTrace();
-//        }
-
-        return null;
+    @RequestMapping(value="/getToken",method = RequestMethod.POST)
+    @ResponseBody
+    public Object login(@RequestBody String code){
+        Map<String,String> map = new Gson().fromJson(code, Map.class);
+        code = map.get("code");
+        String uri="https://api.cnblogs.com/token";
+        HttpPost httpPost = new HttpPost(uri);
+        ArrayList<NameValuePair> body = new ArrayList<>();
+        body.add(new BasicNameValuePair("client_id",clientId));
+        body.add(new BasicNameValuePair("client_secret",clientSecret));
+        body.add(new BasicNameValuePair("grant_type","authorization_code"));
+        body.add(new BasicNameValuePair("code",code));
+        body.add(new BasicNameValuePair("redirect_uri","https://oauth.cnblogs.com/auth/callback"));
+        httpPost.setEntity(new UrlEncodedFormEntity(body));
+        try (CloseableHttpClient client=HttpClients.createDefault()){
+            try (CloseableHttpResponse response = client.execute(httpPost)) {
+                int resCode = response.getCode();
+                if (resCode!=200){
+                    //出错
+                    return AuthResponse.fail(500,EntityUtils.toString(response.getEntity()));
+                }else {
+                    HttpEntity entity = response.getEntity();
+                    String res = EntityUtils.toString(entity);
+                    //System.out.println(res);
+                    Map<String,String> resMap= new Gson().fromJson(res, Map.class);
+                    return AuthResponse.suc(resMap.get("access_token"));
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

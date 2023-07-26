@@ -5,6 +5,8 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 /**
  * 文章实体类
  **/
@@ -19,6 +21,8 @@ public class Article {
     private String articleName; //文章名
 
     private String content; //文章内容
+
+    private Date updateTime;
 
 }
 
