@@ -19,14 +19,12 @@ public class AuthResponse {
 
     String msg;
 
-    String token;
-
-    public static AuthResponse suc(String token){
-        return new AuthResponse(200,null,token);
+    public static AuthResponse suc(){
+        return new AuthResponse(200,null);
     }
 
     public static AuthResponse fail(int code,String msg){
-        return new AuthResponse(code,msg,null);
+        return new AuthResponse(code,msg);
     }
 
 }

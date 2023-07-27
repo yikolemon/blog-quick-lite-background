@@ -2,6 +2,7 @@ package com.yikolemon.controller;
 
 
 import com.google.gson.Gson;
+import com.yikolemon.entity.AuthToken;
 import com.yikolemon.vo.AuthResponse;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
@@ -93,7 +94,10 @@ public class Oauth2Controller {
                     String res = EntityUtils.toString(entity);
                     //System.out.println(res);
                     Map<String,String> resMap= new Gson().fromJson(res, Map.class);
-                    return AuthResponse.suc(resMap.get("access_token"));
+                    //登录成功了，在本地存储access_token和refresh_token；
+                    AuthToken.access_token=resMap.get("access_token");
+                    AuthToken.refresh_token=resMap.get("refresh_token");
+                    return AuthResponse.suc();
                 }
             }
         } catch (Exception e) {
