@@ -32,7 +32,7 @@ import java.util.Map;
 @Slf4j
 public class AuthJob {
 
-    private static DateTimeFormatter pattern=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM:ss");
+    //private static DateTimeFormatter pattern=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM:ss");
 
     @Value("${cnblogs.oauth2.client_id}")
     private  String clientId = null;
