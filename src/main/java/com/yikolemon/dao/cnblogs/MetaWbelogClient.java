@@ -1,8 +1,9 @@
 package com.yikolemon.dao.cnblogs;
 
-import com.google.gson.Gson;
-import com.yikolemon.entity.AuthToken;
+import com.yikolemon.entity.Article;
+import com.yikolemon.util.Map2EntityUtil;
 import com.yikolemon.util.MetaWeblogUtil;
+import com.yikolemon.util.CnblogsXmlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -10,12 +11,10 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.NameValuePair;
-import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +42,7 @@ public class MetaWbelogClient {
     @Value("${cnblogs.token}")
     private String token;
 
-    public String getPost(String id){
+    public Article getPost(String id){
         HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Content-Type","application/xml");
         ArrayList<NameValuePair> list = new ArrayList<>();
@@ -60,8 +59,9 @@ public class MetaWbelogClient {
                         HttpEntity entity = response.getEntity();
                         String xml = EntityUtils.toString(entity);
                         Document document = DocumentHelper.parseText(xml);
-                        Element rootElement = document.getRootElement();
-                        System.out.println(rootElement.getTextTrim());
+                        Map<String, String> articleMap = CnblogsXmlUtil.getKVByDocument(document);
+                        Article article = Map2EntityUtil.maptoArticle(articleMap);
+                        return article;
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);

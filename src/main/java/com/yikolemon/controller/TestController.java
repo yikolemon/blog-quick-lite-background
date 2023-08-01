@@ -1,6 +1,7 @@
 package com.yikolemon.controller;
 
 import com.yikolemon.dao.cnblogs.MetaWbelogClient;
+import com.yikolemon.entity.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +22,8 @@ public class TestController {
 
     @GetMapping("/getPost")
     public String getPost(){
-        String post = metaWbelogClient.getPost("17096028");
-        return post;
+        Article article = metaWbelogClient.getPost("17096028");
+        return null;
     }
 
 }

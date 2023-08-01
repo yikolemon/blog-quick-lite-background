@@ -18,11 +18,11 @@ public class Article {
     @Id
     private String id;//文章主键
 
-    private String articleName; //文章名
+    private String title; //文章名
 
     private String content; //文章内容
 
-    private Date updateTime;
+    private Date createTime;
 
 }
 
