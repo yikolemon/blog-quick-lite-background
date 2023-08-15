@@ -1,5 +1,6 @@
 package com.yikolemon.entity;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
@@ -16,12 +17,16 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Article {
     @Id
+    @SerializedName("Id")
     private String id;//文章主键
 
+    @SerializedName("Title")
     private String title; //文章名
 
+    @SerializedName("Content")
     private String content; //文章内容
 
+    @SerializedName("PostDate")
     private Date createTime;
 
 }

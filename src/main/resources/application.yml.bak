@@ -9,9 +9,11 @@ spring:
       password:  #密码
 
 cnblogs:
-  url:
+  url: "https://api.cnblogs.com/api"
   username:
   token:
   oauth2:
     client_id:
     client_secret:
+
+tempToken:
