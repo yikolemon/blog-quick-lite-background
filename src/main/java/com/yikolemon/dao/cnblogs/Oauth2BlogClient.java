@@ -87,4 +87,13 @@ public class Oauth2BlogClient {
         return cnblogsArticleList;
     }
 
+
+    public List<String> getAllArticleIdList(){
+        List<Article> articles = getAllArticleList();
+        ArrayList<String> list = new ArrayList<>();
+        for (Article a : articles) {
+            list.add(a.getId());
+        }
+        return list;
+    }
 }

@@ -6,6 +6,7 @@ import com.yikolemon.entity.Article;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,15 +23,22 @@ public class Map2EntityUtil {
      * @return
      */
 
-    public static Article maptoArticle(Map<String,String> map) {
+    public static Article maptoArticle(Map<String,Object> map) {
         //时间进行特殊处理注入
-        String dateCreated = map.remove("dateCreated");
+        String dateCreated = (String) map.remove("dateCreated");
         //将description修改为content
-        String description = map.get("description");
+        String description = (String) map.get("description");
         map.remove("description");
         map.put("content",description);
-        String postid = map.remove("postid");
+        String postid = (String) map.remove("postid");
         map.put("id",postid);
+        List<String> categories = (List<String>)map.remove("categories");
+        for (int i = 0; i < categories.size(); i++) {
+            if (categories.get(i).contains("随笔分类")){
+                map.put("category",categories.get(i).replace("[随笔分类]",""));
+                break;
+            }
+        }
         Gson gson = new Gson();
         String str = gson.toJson(map);
         Article article = gson.fromJson(str, Article.class);

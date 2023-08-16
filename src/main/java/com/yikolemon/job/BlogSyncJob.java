@@ -37,24 +37,21 @@ public class BlogSyncJob {
     /**
      * 同步博客到本地数据库，并保存本地文件
      */
-    @Scheduled(cron="0 0/180 * * * *")//每三小时执行一次
+//    @Scheduled(cron="0 0/180 * * * *")//每三小时执行一次
+    @Scheduled(cron="0/10 * * * * *")
     public void syncBlog(){
-        List<Article> cnblogsArticleList = oauth2BlogClient.getAllArticleList();
+        List<String> allArticleIdList = oauth2BlogClient.getAllArticleIdList();
         List<Article> localArticleList = articleRepository.findAll();
         HashMap hashMap = new HashMap<>();
         for (Article localArticle : localArticleList) {
             hashMap.put(localArticle.getId(),localArticle);
         }
-        for (Article cnblogsArticle : cnblogsArticleList) {
-            if (!hashMap.containsKey(cnblogsArticle.getId())){
+        for (String blogId : allArticleIdList) {
+            if (!hashMap.containsKey(blogId)){
                 //说明这个不存在，需要更新进入数据库
-                Article post = metaWbelogClient.getPost(cnblogsArticle.getId());
-                //注入content
-                cnblogsArticle.setContent(post.getContent());
+                Article article = metaWbelogClient.getPost(blogId);
                 //需要注入其他信息
-
-
-                articleRepository.insert(cnblogsArticle);
+                articleRepository.insert(article);
             }
         }
     }

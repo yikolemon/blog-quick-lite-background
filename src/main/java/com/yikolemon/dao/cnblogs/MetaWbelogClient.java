@@ -1,5 +1,6 @@
 package com.yikolemon.dao.cnblogs;
 
+import cn.hutool.core.util.XmlUtil;
 import com.yikolemon.entity.Article;
 import com.yikolemon.util.Map2EntityUtil;
 import com.yikolemon.util.MetaWeblogUtil;
@@ -59,7 +60,7 @@ public class MetaWbelogClient {
                         HttpEntity entity = response.getEntity();
                         String xml = EntityUtils.toString(entity);
                         Document document = DocumentHelper.parseText(xml);
-                        Map<String, String> articleMap = CnblogsXmlUtil.getKVByDocument(document);
+                        Map<String, Object> articleMap = CnblogsXmlUtil.getKVByDocument(document);
                         Article article = Map2EntityUtil.maptoArticle(articleMap);
                         return article;
                     }

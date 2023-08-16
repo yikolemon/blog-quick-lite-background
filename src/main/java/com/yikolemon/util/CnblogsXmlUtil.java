@@ -3,6 +3,7 @@ package com.yikolemon.util;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.tree.DefaultText;
 
 import java.util.*;
@@ -22,6 +23,7 @@ public class CnblogsXmlUtil {
      */
     public static List<Element> getTargetElementByName(Document document){
         Element rootElement = document.getRootElement();
+        rootElement.normalize();
         // 通过element对象的elementIterator方法获取迭代器
         Queue<Element> elements=new LinkedList<>();
         elements.add(rootElement);
@@ -46,16 +48,40 @@ public class CnblogsXmlUtil {
     /**
      * 通过List<Element> member列表，获取其中的name-value键值对，以Map<String,String>形式返回
      */
-    public static Map<String, String> getMemberKV(List<Element> list){
-        HashMap<String, String> map = new HashMap<>();
+    public static Map<String, Object> getMemberKV(List<Element> list){
+        HashMap<String, Object> map = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             Element tempElement = list.get(i);
             Element nameElement = tempElement.element("name");
             Element valueElement = tempElement.element("value");
             String nameValue = nameElement.getText();
             //在value解析时，会把\n解析成一个defaultText对象，所以需要去除这些对象
-            String valueValue = getSingleValueElementText(valueElement);
-            map.put(nameValue,valueValue);
+            Element valueValue = getValueElements(valueElement);
+            if (valueValue.content().size()==0){
+                //不注入
+            } else if (valueValue.content().size()==1){
+                map.put(nameValue,valueValue.content().get(0).getText());
+            }else {
+                ArrayList<String> strs = new ArrayList<>();
+                //说明是array,因为array有\n，content为3
+                ArrayList<Element> queue=new ArrayList();
+                queue.add(valueValue);
+                while (queue.size()>0){
+                    Element poll = queue.remove(0);
+                    Iterator<Element> iterator = poll.elementIterator();
+                    while (iterator.hasNext()){
+                        Element cur=iterator.next();
+                        if (cur.getNodeType()==Node.ELEMENT_NODE){
+                            if ("string".equals(cur.getName())){
+                                strs.add(cur.getText());
+                            }else {
+                                queue.add(cur);
+                            }
+                        }
+                    }
+                }
+                map.put(nameValue,strs);
+            }
         }
         return map;
     }
@@ -65,9 +91,9 @@ public class CnblogsXmlUtil {
      * @param document
      * @return
      */
-    public static Map<String,String> getKVByDocument(Document document){
+    public static Map<String,Object> getKVByDocument(Document document){
         List<Element> list = getTargetElementByName(document);
-        Map<String, String> memberKV = getMemberKV(list);
+        Map<String, Object> memberKV = getMemberKV(list);
         return memberKV;
     }
 
@@ -75,19 +101,16 @@ public class CnblogsXmlUtil {
      * @param valueElement
      * @return Value的String内容
      */
-    public static String getSingleValueElementText(Element valueElement){
+    public static Element getValueElements(Element valueElement){
         Iterator<Element> iterator = valueElement.elementIterator();
         while (iterator.hasNext()) {
             Element next = iterator.next();
-            if (next instanceof DefaultText) {
-                continue;
-            } else {
-                //获取到了value的element
-                valueElement = next;
-                break;
+            if (next.getNodeType()== Node.ELEMENT_NODE){
+                //说明是element节点
+                return next;
             }
         }
-        return valueElement.getText();
+        return null;
     }
 
     //暂时不写
