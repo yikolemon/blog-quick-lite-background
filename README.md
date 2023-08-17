@@ -5,3 +5,4 @@ react博客的后端部分
 
 mongo:
 docker run -p 27017:27017 -v /docker/mongo/db:/data/db --name mongo -d mongo --auth
+docker run -p 27017:27017 --name mongo -d mongo --auth

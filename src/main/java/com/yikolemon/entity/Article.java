@@ -31,11 +31,37 @@ public class Article {
     private Date createTime;
 
     //文章标签
+    @SerializedName(value = "tags")
     private List<String> tags;
 
     //文章分类
     @SerializedName(value = "category")
     private String category;
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Article)){
+            return false;
+        }
+        Article article=(Article) obj;
+        return getEqual(this.id,article.id)
+                &&getEqual(this.title,article.title)
+                &&getEqual(this.content,article.content)
+                &&getEqual(this.createTime,article.createTime)
+                &&getEqual(this.tags,article.tags)
+                &&getEqual(this.category,article.category);
+    }
+
+    private <T> boolean getEqual(T a,T b){
+        if ((a!=null&&b!=null)||(a==null&&b==null)){
+            return true;
+        }else if (a==null||b==null){
+            return false;
+        }
+        return a.equals(b);
+    }
 
 }
 

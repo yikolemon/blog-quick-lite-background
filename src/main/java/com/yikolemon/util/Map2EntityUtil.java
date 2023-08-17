@@ -39,6 +39,11 @@ public class Map2EntityUtil {
                 break;
             }
         }
+        if (map.containsKey("mt_keywords")){
+            String keywordsStr = (String)map.remove("mt_keywords");
+            String[] keywords = keywordsStr.split(",");
+            map.put("tags",keywords);
+        }
         Gson gson = new Gson();
         String str = gson.toJson(map);
         Article article = gson.fromJson(str, Article.class);

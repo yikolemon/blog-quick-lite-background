@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -46,14 +47,22 @@ public class BlogSyncJob {
         for (Article localArticle : localArticleList) {
             hashMap.put(localArticle.getId(),localArticle);
         }
+        ArrayList<Article> addList = new ArrayList<>();
         for (String blogId : allArticleIdList) {
+            Article article = metaWbelogClient.getPost(blogId);
             if (!hashMap.containsKey(blogId)){
                 //说明这个不存在，需要更新进入数据库
-                Article article = metaWbelogClient.getPost(blogId);
                 //需要注入其他信息
-                articleRepository.insert(article);
+                addList.add(article);
+            }else{
+                //存在则比较
+                if (!article.equals(hashMap.get(blogId))){
+                    articleRepository.deleteById(blogId);
+                    addList.add(article);
+                }
             }
         }
+        articleRepository.insert(addList);
     }
 
 }
