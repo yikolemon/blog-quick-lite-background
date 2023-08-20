@@ -1,9 +1,9 @@
 package com.yikolemon.job;
 
-import com.yikolemon.dao.ArticleRepository;
 import com.yikolemon.dao.cnblogs.MetaWbelogClient;
 import com.yikolemon.dao.cnblogs.Oauth2BlogClient;
 import com.yikolemon.entity.Article;
+import com.yikolemon.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,7 +27,7 @@ public class BlogSyncJob {
 
 
     @Autowired
-    private ArticleRepository articleRepository;
+    private ArticleService articleService;
 
     @Autowired
     private Oauth2BlogClient oauth2BlogClient;
@@ -42,7 +42,7 @@ public class BlogSyncJob {
     @Scheduled(cron="0/10 * * * * *")
     public void syncBlog(){
         List<String> allArticleIdList = oauth2BlogClient.getAllArticleIdList();
-        List<Article> localArticleList = articleRepository.findAll();
+        List<Article> localArticleList = articleService.getList();
         HashMap hashMap = new HashMap<>();
         for (Article localArticle : localArticleList) {
             hashMap.put(localArticle.getId(),localArticle);
@@ -57,12 +57,12 @@ public class BlogSyncJob {
             }else{
                 //存在则比较
                 if (!article.equals(hashMap.get(blogId))){
-                    articleRepository.deleteById(blogId);
+                    articleService.deleteById(blogId);
                     addList.add(article);
                 }
             }
         }
-        articleRepository.insert(addList);
+        articleService.saveAll(addList);
     }
 
 }

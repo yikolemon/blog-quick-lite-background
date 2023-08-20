@@ -11,13 +11,13 @@ public interface ArticleService {
      * @param article
      * @return
      */
-    int create(Article article);
+    void save(Article article);
 
-    /**
-     * 删除文章
-     */
+    void saveAll(List<Article> articleList);
 
-    int delete(List<String> ids);
+    void deleteById(String id);
+
+    void deleteList(List<String> ids);
 
     int update(Article article);
 
@@ -32,5 +32,7 @@ public interface ArticleService {
     * 查询列表
     */
     List<Article> getList();
+
+
 
 }

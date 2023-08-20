@@ -1,5 +1,6 @@
 package com.yikolemon.service.impl;
 
+import com.yikolemon.dao.template.ArticleDao;
 import com.yikolemon.dao.ArticleRepository;
 import com.yikolemon.entity.Article;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,31 +21,39 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private ArticleDao articleDao;
+
+
     @Override
-    public int create(Article article) {
-        Article save = articleRepository.save(article);
-        return 1;
+    public void save(Article article) {
+        articleRepository.save(article);
     }
 
     @Override
-    public int delete(List<String> ids) {
-        List<Article> deleteList = new ArrayList<>();
+    public void saveAll(List<Article> articleList) {
+        articleRepository.saveAll(articleList);
+    }
 
-        for(String id:ids){
-            Article article = new Article();
-            article.setId(id);
-            deleteList.add(article);
+    @Override
+    public void deleteById(String id) {
+        articleRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteList(List<String> ids) {
+        List<Article> articleList=new ArrayList<>();
+        for (int i = 0; i < ids.size(); i++) {
+            articleList.get(i).setId(ids.get(i));
         }
-        articleRepository.deleteAll(deleteList);
-
-        return ids.size();
+        articleRepository.deleteAll(articleList);
     }
 
 
     //该方法还不确定
     @Override
     public int update(Article article) {
-        articleRepository.insert(article);
+        //articleRepository.insert(article);
         return 1;
     }
 

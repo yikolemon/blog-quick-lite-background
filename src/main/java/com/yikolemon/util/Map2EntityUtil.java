@@ -1,5 +1,6 @@
 package com.yikolemon.util;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.google.gson.Gson;
 import com.yikolemon.entity.Article;
 
@@ -44,9 +45,7 @@ public class Map2EntityUtil {
             String[] keywords = keywordsStr.split(",");
             map.put("tags",keywords);
         }
-        Gson gson = new Gson();
-        String str = gson.toJson(map);
-        Article article = gson.fromJson(str, Article.class);
+        Article article = BeanUtil.mapToBean(map, Article.class, true);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss");
         try {
             Date parse = simpleDateFormat.parse(dateCreated);

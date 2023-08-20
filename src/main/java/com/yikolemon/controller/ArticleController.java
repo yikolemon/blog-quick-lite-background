@@ -23,10 +23,11 @@ public class ArticleController {
     @PostMapping("/create")
     @ApiOperation("创建文章")
     public String create(@RequestBody Article article) {
-        int result = articleService.create(article);
-        if (result > 0) {
+        try{
+            articleService.save(article);
             return "文章创建成功";
-        } else {
+        }
+        catch (Exception e){
             return "文章创建失败";
         }
     }
@@ -34,10 +35,12 @@ public class ArticleController {
     @PostMapping("/delete")
     @ApiOperation("批量删除文章")
     public String delete(@RequestParam("ids") List<String> ids) {
-        int count = articleService.delete(ids);
-        if (count > 0) {
-            return "删除了" + count + "篇文章";
-        } else {
+
+        try {
+            articleService.deleteList(ids);
+            return "删除文章成功";
+        } catch (Exception e) {
+            e.printStackTrace();
             return "删除文章失败";
         }
     }

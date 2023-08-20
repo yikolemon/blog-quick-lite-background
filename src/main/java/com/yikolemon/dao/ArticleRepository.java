@@ -10,7 +10,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ArticleRepository extends MongoRepository<Article,String> {
+
+
 	//根据id查询文章
     Article findByid(String id);
+
 
 }
