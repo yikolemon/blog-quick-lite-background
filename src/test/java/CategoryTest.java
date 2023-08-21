@@ -1,6 +1,5 @@
 import com.yikolemon.SpringBootApplication;
 import com.yikolemon.dao.impl.CategoryDaoImpl;
-import com.yikolemon.dao.impl.TagDaoImpl;
 import com.yikolemon.dao.template.TagDao;
 import com.yikolemon.entity.Article;
 import com.yikolemon.entity.Tag;

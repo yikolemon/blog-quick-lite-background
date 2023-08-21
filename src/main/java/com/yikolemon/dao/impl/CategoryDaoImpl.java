@@ -1,20 +1,12 @@
 package com.yikolemon.dao.impl;
 
 import com.yikolemon.dao.template.CategoryDao;
-import com.yikolemon.entity.Article;
 import com.yikolemon.entity.Category;
-import com.yikolemon.entity.Page;
-import com.yikolemon.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

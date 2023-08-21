@@ -1,7 +1,6 @@
 package com.yikolemon.dao.impl;
 
 import com.yikolemon.dao.template.TagDao;
-import com.yikolemon.entity.Category;
 import com.yikolemon.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;

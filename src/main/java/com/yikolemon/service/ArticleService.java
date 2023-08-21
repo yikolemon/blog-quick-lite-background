@@ -9,8 +9,6 @@ public interface ArticleService {
 
     /**
      * 添加文章
-     * @param article
-     * @return
      */
     void save(Article article);
 
