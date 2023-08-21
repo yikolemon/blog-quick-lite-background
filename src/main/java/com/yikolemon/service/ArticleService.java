@@ -1,6 +1,7 @@
 package com.yikolemon.service;
 
 import com.yikolemon.entity.Article;
+import com.yikolemon.entity.Page;
 
 import java.util.List;
 
@@ -21,18 +22,14 @@ public interface ArticleService {
 
     int update(Article article);
 
-    /**
-     * 根据id查询
-     * @param id
-     * @return
-     */
-    Article getById(String id);
-
     /*
     * 查询列表
     */
-    List<Article> getList();
+    List<Article> getAllList();
 
+    Page<Article> getArticlePageWithOutContent(Integer pageNum);
+
+    Article getArticleContent(String articleId);
 
 
 }

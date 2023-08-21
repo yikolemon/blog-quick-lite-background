@@ -29,13 +29,7 @@ public class CategoryDaoImpl implements CategoryDao {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public List<Tag> getCategoryArticleCount() {
-
-        //目的：查询出每个班里有多少姓张的男生，并用班级代号分组输出
-//.group("class").count().as("count")就是以班级分组，计算数量，数量命名为“count”
-//project中表示需要输出的字段，.and.as就是“classId”这个字段也要输出，字段名为“cId”,.and("cId").previousOperation就是以“cId”作为分组的“_id”输出)
-
-        //Criteria criteria = Criteria.where("category").is("学习笔记");
+    public List<Category> getCategoryArticleCount() {
 
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("category").count().as("num"),

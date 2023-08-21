@@ -1,5 +1,6 @@
 package com.yikolemon.dao.template;
 
+import com.yikolemon.entity.Category;
 import com.yikolemon.entity.Tag;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,6 @@ import java.util.List;
 @Repository
 public interface CategoryDao {
 
-    public List<Tag> getCategoryArticleCount();
+    public List<Category> getCategoryArticleCount();
 
 }

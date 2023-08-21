@@ -42,7 +42,7 @@ public class BlogSyncJob {
     @Scheduled(cron="0/10 * * * * *")
     public void syncBlog(){
         List<String> allArticleIdList = oauth2BlogClient.getAllArticleIdList();
-        List<Article> localArticleList = articleService.getList();
+        List<Article> localArticleList = articleService.getAllList();
         HashMap hashMap = new HashMap<>();
         for (Article localArticle : localArticleList) {
             hashMap.put(localArticle.getId(),localArticle);

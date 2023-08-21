@@ -1,7 +1,11 @@
 package com.yikolemon.dao.impl;
 
 import com.yikolemon.dao.template.TagDao;
+import com.yikolemon.entity.Category;
 import com.yikolemon.entity.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,8 +17,18 @@ import java.util.List;
  */
 @Repository
 public class TagDaoImpl implements TagDao {
+
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Override
     public List<Tag> getTagArticleCount() {
-        return null;
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.group("tags").count().as("num"),
+                Aggregation.project("num").and("name").previousOperation());
+
+        List<Tag> result = mongoTemplate.aggregate(aggregation,"article",Tag.class).getMappedResults();
+        return result;
     }
 }

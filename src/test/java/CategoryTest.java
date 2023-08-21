@@ -1,6 +1,9 @@
 import com.yikolemon.SpringBootApplication;
 import com.yikolemon.dao.impl.CategoryDaoImpl;
+import com.yikolemon.dao.impl.TagDaoImpl;
+import com.yikolemon.dao.template.TagDao;
 import com.yikolemon.entity.Article;
+import com.yikolemon.entity.Tag;
 import com.yikolemon.service.ArticleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +27,12 @@ public class CategoryTest {
     private ArticleService articleService;
     @Autowired
     private CategoryDaoImpl categoryDao;
+    @Autowired
+    private TagDao tagDao;
 
     @Test
     public void test1(){
-        List<Article> list = articleService.getList();
+        List<Article> list = articleService.getAllList();
         System.out.println(list);
     }
 
@@ -35,4 +40,17 @@ public class CategoryTest {
     public void test2(){
         categoryDao.getCategoryArticleCount();
     }
+
+    @Test
+    public void test3(){
+        List<Tag> tagArticleCount = tagDao.getTagArticleCount();
+        System.out.println(tagArticleCount);
+    }
+
+    @Test
+    public void test4(){
+        Article articleContent = articleService.getArticleContent("17323618");
+        System.out.println(articleContent);
+    }
+
 }

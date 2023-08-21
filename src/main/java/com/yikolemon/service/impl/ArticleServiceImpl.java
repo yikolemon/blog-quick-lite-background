@@ -3,6 +3,7 @@ package com.yikolemon.service.impl;
 import com.yikolemon.dao.template.ArticleDao;
 import com.yikolemon.dao.ArticleRepository;
 import com.yikolemon.entity.Article;
+import com.yikolemon.entity.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.yikolemon.service.ArticleService;
@@ -58,12 +59,19 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article getById(String id) {
-        return articleRepository.findByid(id);
+    public List<Article> getAllList() {
+        return  articleRepository.findAll();
     }
 
     @Override
-    public List<Article> getList() {
-        return  articleRepository.findAll();
+    public Page<Article> getArticlePageWithOutContent(Integer pageNum) {
+        return articleDao.getArticlePageWithOutContent(pageNum);
     }
+
+    @Override
+    public Article getArticleContent(String articleId) {
+        return articleRepository.findByid(articleId);
+    }
+
+
 }
